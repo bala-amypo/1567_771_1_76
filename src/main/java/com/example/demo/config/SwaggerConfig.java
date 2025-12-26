@@ -1,10 +1,8 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,24 +10,22 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI openAPI() {
-
-        SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT");
+    public OpenAPI customOpenAPI() {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("COI Detection Engine API")
-                        .description("Conflict of Interest backend services")
+                        .title("Conflict of Interest API")
+                        .description("JWT secured REST APIs")
                         .version("1.0"))
-                .addSecurityItem(
-                        new SecurityRequirement().addList("bearerAuth")
-                )
-                .components(
-                        new Components()
-                                .addSecuritySchemes("bearerAuth", securityScheme)
-                );
+                .components(new Components()
+                        .addSecuritySchemes(
+                                "bearerAuth",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                        ))
+                .addSecurityItem(new SecurityRequirement()
+                        .addList("bearerAuth"));
     }
 }
