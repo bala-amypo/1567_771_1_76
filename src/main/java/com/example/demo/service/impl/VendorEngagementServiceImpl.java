@@ -5,7 +5,9 @@ import com.example.demo.repository.VendorEngagementRepository;
 import com.example.demo.service.VendorEngagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VendorEngagementServiceImpl implements VendorEngagementService {
@@ -14,22 +16,23 @@ public class VendorEngagementServiceImpl implements VendorEngagementService {
     private VendorEngagementRepository repository;
 
     @Override
-    public VendorEngagement create(VendorEngagement record) {
-        return repository.save(record);
-    }
-
-    @Override
-    public List<VendorEngagement> getEngagementsByEmployee(Long employeeId) {
-        return repository.findByEmployeeId(employeeId);
-    }
-
-    @Override
-    public List<VendorEngagement> getEngagementsByVendor(Long vendorId) {
-        return repository.findByVendorId(vendorId);
-    }
-
-    @Override
-    public List<VendorEngagement> getAllEngagements() {
+    public List<VendorEngagement> getAllVendors() {
         return repository.findAll();
+    }
+
+    @Override
+    public VendorEngagement getVendorById(Long id) {
+        Optional<VendorEngagement> vendor = repository.findById(id);
+        return vendor.orElse(null);
+    }
+
+    @Override
+    public VendorEngagement saveVendor(VendorEngagement vendor) {
+        return repository.save(vendor);
+    }
+
+    @Override
+    public void deleteVendor(Long id) {
+        repository.deleteById(id);
     }
 }
