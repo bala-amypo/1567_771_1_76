@@ -2,38 +2,38 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ConflictFlag;
 import com.example.demo.service.ConflictFlagService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/conflict-flags")
+@RequestMapping("/conflict-flags")
 public class ConflictFlagController {
 
-    private final ConflictFlagService flagService;
+    private final ConflictFlagService service;
 
-    public ConflictFlagController(ConflictFlagService flagService) {
-        this.flagService = flagService;
+    public ConflictFlagController(ConflictFlagService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ConflictFlag addFlag(@RequestBody ConflictFlag flag) {
-        return flagService.addFlag(flag);
+    public ResponseEntity<ConflictFlag> addFlag(@RequestBody ConflictFlag flag) {
+        return ResponseEntity.ok(service.addFlag(flag));
     }
 
     @GetMapping("/{id}")
-    public ConflictFlag getFlagById(@PathVariable Long id) {
-        return flagService.getFlagById(id);
+    public ResponseEntity<ConflictFlag> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getFlagById(id));
     }
 
-    @GetMapping("/case/{caseId}")
-    public List<ConflictFlag> getFlagsByCase(
-            @PathVariable Long caseId) {
-        return flagService.getFlagsByCase(caseId);
+    @GetMapping("/case/{id}")
+    public ResponseEntity<List<ConflictFlag>> getByCase(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getFlagsByCase(id));
     }
 
     @GetMapping
-    public List<ConflictFlag> getAllFlags() {
-        return flagService.getAllFlags();
+    public ResponseEntity<List<ConflictFlag>> getAll() {
+        return ResponseEntity.ok(service.getAllFlags());
     }
 }

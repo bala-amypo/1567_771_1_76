@@ -2,44 +2,40 @@ package com.example.demo.controller;
 
 import com.example.demo.model.PersonProfile;
 import com.example.demo.service.PersonProfileService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/persons")
+@RequestMapping("/persons")
 public class PersonProfileController {
 
-    private final PersonProfileService personProfileService;
+    private final PersonProfileService service;
 
-    public PersonProfileController(PersonProfileService personProfileService) {
-        this.personProfileService = personProfileService;
+    public PersonProfileController(PersonProfileService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public PersonProfile createPerson(@RequestBody PersonProfile person) {
-        return personProfileService.createPerson(person);
+    public ResponseEntity<PersonProfile> createPerson(@RequestBody PersonProfile person) {
+        return ResponseEntity.ok(service.createPerson(person));
     }
 
     @GetMapping("/{id}")
-    public PersonProfile getPersonById(@PathVariable Long id) {
-        return personProfileService.getPersonById(id);
+    public ResponseEntity<PersonProfile> getPersonById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPersonById(id));
     }
 
     @GetMapping
-    public List<PersonProfile> getAllPersons() {
-        return personProfileService.getAllPersons();
+    public ResponseEntity<List<PersonProfile>> getAllPersons() {
+        return ResponseEntity.ok(service.getAllPersons());
     }
 
-    @GetMapping("/reference/{referenceId}")
-    public PersonProfile getByReferenceId(@PathVariable String referenceId) {
-        return personProfileService.findByReferenceId(referenceId);
-    }
-
-    @PutMapping("/{id}/relationship-declared")
-    public PersonProfile updateRelationshipDeclared(
-            @PathVariable Long id,
-            @RequestParam boolean declared) {
-        return personProfileService.updateRelationshipDeclared(id, declared);
+    @GetMapping("/reference/{refId}")
+    public ResponseEntity<PersonProfile> getByReferenceId(@PathVariable String refId) {
+        return service.findByReferenceId(refId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

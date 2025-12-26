@@ -2,40 +2,36 @@ package com.example.demo.controller;
 
 import com.example.demo.model.RelationshipDeclaration;
 import com.example.demo.service.RelationshipDeclarationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/relationships")
+@RequestMapping("/relationships")
 public class RelationshipDeclarationController {
 
-    private final RelationshipDeclarationService relationshipService;
+    private final RelationshipDeclarationService service;
 
-    public RelationshipDeclarationController(RelationshipDeclarationService relationshipService) {
-        this.relationshipService = relationshipService;
+    public RelationshipDeclarationController(RelationshipDeclarationService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public RelationshipDeclaration declareRelationship(
+    public ResponseEntity<RelationshipDeclaration> declare(
             @RequestBody RelationshipDeclaration declaration) {
-        return relationshipService.declareRelationship(declaration);
-    }
-
-    @GetMapping("/person/{personId}")
-    public List<RelationshipDeclaration> getByPerson(@PathVariable Long personId) {
-        return relationshipService.getDeclarationsByPerson(personId);
+        return ResponseEntity.ok(service.declareRelationship(declaration));
     }
 
     @PutMapping("/{id}/verify")
-    public RelationshipDeclaration verifyDeclaration(
+    public ResponseEntity<RelationshipDeclaration> verify(
             @PathVariable Long id,
             @RequestParam boolean verified) {
-        return relationshipService.verifyDeclaration(id, verified);
+        return ResponseEntity.ok(service.verifyDeclaration(id, verified));
     }
 
     @GetMapping
-    public List<RelationshipDeclaration> getAllDeclarations() {
-        return relationshipService.getAllDeclarations();
+    public ResponseEntity<List<RelationshipDeclaration>> getAll() {
+        return ResponseEntity.ok(service.getAllDeclarations());
     }
 }
