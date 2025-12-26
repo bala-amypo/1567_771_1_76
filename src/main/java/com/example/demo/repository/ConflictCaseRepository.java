@@ -4,5 +4,10 @@ import com.example.demo.model.ConflictCase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface ConflictCaseRepository extends JpaRepository<ConflictCase, Long> {}
+public interface ConflictCaseRepository extends JpaRepository<ConflictCase, Long> {
+
+    List<ConflictCase> findByPrimaryPersonIdOrSecondaryPersonId(Long primaryId, Long secondaryId);
+}
