@@ -1,41 +1,54 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.VendorEngagement;
+import com.example.demo.model.VendorEngagementRecord;
 import com.example.demo.service.VendorEngagementService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendors")
+@RequestMapping("/api/engagements")
 public class VendorEngagementController {
 
-    @Autowired
-    private VendorEngagementService vendorService;
+    private final VendorEngagementService engagementService;
 
-    @GetMapping
-    public List<VendorEngagement> getAllVendors() {
-        return vendorService.getAllVendors();
-    }
-
-    @GetMapping("/{id}")
-    public VendorEngagement getVendorById(@PathVariable Long id) {
-        return vendorService.getVendorById(id);
+    // ✅ Constructor injection (REQUIRED)
+    public VendorEngagementController(VendorEngagementService engagementService) {
+        this.engagementService = engagementService;
     }
 
     @PostMapping
-    public VendorEngagement createVendor(@RequestBody VendorEngagement vendor) {
-        return vendorService.createVendor(vendor);
+    public ResponseEntity<VendorEngagementRecord> add(
+            @RequestBody VendorEngagementRecord record) {
+
+        return ResponseEntity.ok(
+                engagementService.addEngagement(record)
+        );
     }
 
-    @PutMapping("/{id}")
-    public VendorEngagement updateVendor(@PathVariable Long id, @RequestBody VendorEngagement vendor) {
-        return vendorService.updateVendor(id, vendor);
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<VendorEngagementRecord>> byEmployee(
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                engagementService.getEngagementsByEmployee(employeeId)
+        );
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteVendor(@PathVariable Long id) {
-        vendorService.deleteVendor(id);
+    @GetMapping("/vendor/{vendorId}")
+    public ResponseEntity<List<VendorEngagementRecord>> byVendor(
+            @PathVariable Long vendorId) {
+
+        return ResponseEntity.ok(
+                engagementService.getEngagementsByVendor(vendorId)
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VendorEngagementRecord>> getAll() {
+        return ResponseEntity.ok(
+                engagementService.getAllEngagements()
+        );
     }
 }

@@ -2,36 +2,46 @@ package com.example.demo.controller;
 
 import com.example.demo.model.RelationshipDeclaration;
 import com.example.demo.service.RelationshipDeclarationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/relationship")
+@RequestMapping("/api/relationships")
 public class RelationshipDeclarationController {
 
-    @Autowired
-    private RelationshipDeclarationService relationshipService;
+    private final RelationshipDeclarationService relationshipService;
+
+    // ✅ Constructor injection (REQUIRED)
+    public RelationshipDeclarationController(
+            RelationshipDeclarationService relationshipService) {
+        this.relationshipService = relationshipService;
+    }
 
     @PostMapping
-    public ResponseEntity<RelationshipDeclaration> createRelationship(@RequestBody RelationshipDeclaration rel) {
-        return ResponseEntity.ok(relationshipService.createRelationship(rel));
+    public ResponseEntity<RelationshipDeclaration> declare(
+            @RequestBody RelationshipDeclaration declaration) {
+
+        return ResponseEntity.ok(
+                relationshipService.declareRelationship(declaration)
+        );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<RelationshipDeclaration> updateRelationship(@PathVariable Long id, @RequestBody RelationshipDeclaration rel) {
-        return ResponseEntity.ok(relationshipService.updateRelationship(id, rel));
-    }
+    @PatchMapping("/{id}/verify")
+    public ResponseEntity<RelationshipDeclaration> verify(
+            @PathVariable Long id,
+            @RequestParam boolean verified) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RelationshipDeclaration> getRelationshipById(@PathVariable Long id) {
-        return ResponseEntity.ok(relationshipService.getRelationshipById(id));
+        return ResponseEntity.ok(
+                relationshipService.verifyDeclaration(id, verified)
+        );
     }
 
     @GetMapping
-    public ResponseEntity<List<RelationshipDeclaration>> getAllRelationships() {
-        return ResponseEntity.ok(relationshipService.getAllRelationships());
+    public ResponseEntity<List<RelationshipDeclaration>> getAll() {
+        return ResponseEntity.ok(
+                relationshipService.getAllDeclarations()
+        );
     }
 }
