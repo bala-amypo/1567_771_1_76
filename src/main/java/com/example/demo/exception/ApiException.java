@@ -1,12 +1,17 @@
 package com.example.demo.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class ApiException extends RuntimeException {
 
-    public ApiException(String message) {
+    private final HttpStatus status;
+
+    public ApiException(String message, HttpStatus status) {
         super(message);
+        this.status = status;
     }
 
-    public ApiException(String message, Throwable cause) {
-        super(message, cause);
+    public HttpStatus getStatus() {
+        return status;
     }
 }

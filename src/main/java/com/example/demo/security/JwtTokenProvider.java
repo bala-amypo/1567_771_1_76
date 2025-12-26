@@ -1,64 +1,44 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    // Secret key (must be at least 256 bits for HS256)
-    private static final String JWT_SECRET =
-            "MySuperSecretKeyForJwtGenerationMySuperSecretKey";
+    private static final String SECRET_KEY = "secret123";
+    private static final long EXPIRATION_TIME =
+            1000 * 60 * 60; // 1 hour
 
-    // Token validity (24 hours)
-    private static final long JWT_EXPIRATION_MS = 86400000;
-
-    private final Key key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes());
-
-    // =========================
-    // GENERATE TOKEN
-    // =========================
     public String generateToken(String username) {
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION_MS);
 
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    // =========================
-    // GET USERNAME FROM TOKEN
-    // =========================
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
 
-        return claims.getSubject();
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
-    // =========================
-    // VALIDATE TOKEN
-    // =========================
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }
