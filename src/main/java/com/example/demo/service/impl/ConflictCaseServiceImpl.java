@@ -6,6 +6,7 @@ import com.example.demo.service.ConflictCaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConflictCaseServiceImpl implements ConflictCaseService {
@@ -19,16 +20,20 @@ public class ConflictCaseServiceImpl implements ConflictCaseService {
     }
 
     @Override
+    public ConflictCase getConflictCaseById(Long id) {
+        Optional<ConflictCase> cc = repository.findById(id);
+        return cc.orElse(null);
+    }
+
+    @Override
     public ConflictCase createConflictCase(ConflictCase cc) {
         return repository.save(cc);
     }
 
     @Override
     public ConflictCase updateConflictCase(Long id, ConflictCase cc) {
-        return repository.findById(id).map(existing -> {
-            existing.setStatus(cc.getStatus());
-            return repository.save(existing);
-        }).orElse(null);
+        cc.setId(id);
+        return repository.save(cc);
     }
 
     @Override
