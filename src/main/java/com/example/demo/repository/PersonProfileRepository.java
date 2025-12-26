@@ -1,19 +1,12 @@
-package com.example.demo.service;
+package com.example.demo.repository;
 
 import com.example.demo.model.PersonProfile;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface PersonProfileService {
+public interface PersonProfileRepository
+        extends JpaRepository<PersonProfile, Long> {
 
-    PersonProfile createPerson(PersonProfile person);
-
-    PersonProfile getPersonById(Long id);
-
-    List<PersonProfile> getAllPersons();
-
-    Optional<PersonProfile> findByReferenceId(String referenceId);
-
-    PersonProfile updateRelationshipDeclared(Long id, boolean declared);
+    Optional<PersonProfile> findByEmail(String email);
 }

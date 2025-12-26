@@ -1,14 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.repository;
 
 import com.example.demo.model.RelationshipDeclaration;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface RelationshipDeclarationService {
-
-    RelationshipDeclaration declareRelationship(RelationshipDeclaration declaration);
-
-    RelationshipDeclaration verifyDeclaration(Long id, boolean verified);
-
-    List<RelationshipDeclaration> getAllDeclarations();
+public interface RelationshipDeclarationRepository
+        extends JpaRepository<RelationshipDeclaration, Long> {
 }
