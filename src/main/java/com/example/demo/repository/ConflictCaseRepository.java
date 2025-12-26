@@ -1,15 +1,19 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
 import com.example.demo.model.ConflictCase;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ConflictCaseRepository
-        extends JpaRepository<ConflictCase, Long> {
+public interface ConflictCaseService {
 
-    List<ConflictCase> findByPrimaryPersonIdOrSecondaryPersonId(
-            Long primaryPersonId,
-            Long secondaryPersonId
-    );
+    ConflictCase createCase(ConflictCase conflictCase);
+
+    ConflictCase updateCaseStatus(Long id, String status);
+
+    List<ConflictCase> getCasesByPerson(Long personId);
+
+    Optional<ConflictCase> getCaseById(Long id);
+
+    List<ConflictCase> getAllCases();
 }

@@ -1,12 +1,16 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
 import com.example.demo.model.ConflictFlag;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ConflictFlagRepository
-        extends JpaRepository<ConflictFlag, Long> {
+public interface ConflictFlagService {
 
-    List<ConflictFlag> findByCaseId(Long caseId);
+    ConflictFlag addFlag(ConflictFlag flag);
+
+    ConflictFlag getFlagById(Long id);
+
+    List<ConflictFlag> getFlagsByCase(Long caseId);
+
+    List<ConflictFlag> getAllFlags();
 }
