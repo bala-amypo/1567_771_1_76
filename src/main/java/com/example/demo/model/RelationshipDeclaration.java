@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 
 @Entity
 public class RelationshipDeclaration {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private boolean verified;
 
     public Long getId() { return id; }
