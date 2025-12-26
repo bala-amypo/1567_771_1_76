@@ -1,13 +1,19 @@
 package com.example.demo.model;
 
-public class RelationshipDeclaration {
-    private Long id;
-    private String relation;
+import jakarta.persistence.*;
 
-    // Getters and Setters
+@Entity
+public class RelationshipDeclaration {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private boolean verified;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getRelation() { return relation; }
-    public void setRelation(String relation) { this.relation = relation; }
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
 }

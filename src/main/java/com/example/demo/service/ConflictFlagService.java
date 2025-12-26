@@ -4,8 +4,8 @@ import com.example.demo.model.ConflictFlag;
 import java.util.List;
 
 public interface ConflictFlagService {
-    ConflictFlag createConflictFlag(ConflictFlag flag);
-    ConflictFlag updateConflictFlag(Long id, ConflictFlag flag);
-    ConflictFlag getConflictFlagById(Long id);
     List<ConflictFlag> getAllConflictFlags();
+    ConflictFlag createConflictFlag(ConflictFlag cf);
+    ConflictFlag updateConflictFlag(Long id, ConflictFlag cf);
+    void deleteConflictFlag(Long id);
 }
