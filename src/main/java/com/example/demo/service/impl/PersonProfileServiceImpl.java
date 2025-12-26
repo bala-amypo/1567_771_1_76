@@ -3,46 +3,35 @@ package com.example.demo.service.impl;
 import com.example.demo.model.PersonProfile;
 import com.example.demo.repository.PersonProfileRepository;
 import com.example.demo.service.PersonProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
-public class PersonProfileServiceImpl
-        implements PersonProfileService {
+public class PersonProfileServiceImpl implements PersonProfileService {
 
-    private final PersonProfileRepository repository;
+    @Autowired
+    private PersonProfileRepository repository;
 
-    public PersonProfileServiceImpl(
-            PersonProfileRepository repository) {
-        this.repository = repository;
+    @Override
+    public PersonProfile createPerson(PersonProfile person) {
+        return repository.save(person);
     }
 
     @Override
-    public PersonProfile save(PersonProfile personProfile) {
-        return repository.save(personProfile);
+    public PersonProfile getPersonById(Long id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Person not found"));
     }
 
     @Override
-    public List<PersonProfile> getAll() {
+    public List<PersonProfile> getAllPersons() {
         return repository.findAll();
     }
 
     @Override
-    public PersonProfile getById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void updateRelationshipDeclared(
-            Long id, boolean declared) {
-
-        PersonProfile profile =
-                repository.findById(id).orElse(null);
-
-        if (profile != null) {
-            profile.setRelationshipDeclared(declared);
-            repository.save(profile);
-        }
+    public PersonProfile findByReferenceId(String referenceId) {
+        return repository.findByReferenceId(referenceId)
+            .orElseThrow(() -> new RuntimeException("Person not found"));
     }
 }
