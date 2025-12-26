@@ -1,50 +1,52 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.VendorEngagement;
-import com.example.demo.repository.VendorEngagementRepository;
+import com.example.demo.exception.ApiException;
+import com.example.demo.model.VendorEngagementRecord;
+import com.example.demo.repository.PersonProfileRepository;
+import com.example.demo.repository.VendorEngagementRecordRepository;
 import com.example.demo.service.VendorEngagementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public class VendorEngagementServiceImpl implements VendorEngagementService {
 
-    @Autowired
-    private VendorEngagementRepository repository;
+    private final VendorEngagementRecordRepository engagementRepo;
+    private final PersonProfileRepository personRepo;
 
-    @Override
-    public List<VendorEngagement> getAllVendors() {
-        return repository.findAll();
+    // ✅ Constructor injection (REQUIRED)
+    public VendorEngagementServiceImpl(
+            VendorEngagementRecordRepository engagementRepo,
+            PersonProfileRepository personRepo) {
+        this.engagementRepo = engagementRepo;
+        this.personRepo = personRepo;
     }
 
     @Override
-    public VendorEngagement getVendorById(Long id) {
-        return repository.findById(id).orElse(null);
+    public VendorEngagementRecord addEngagement(VendorEngagementRecord record) {
+
+        // validate employee
+        personRepo.findById(record.getEmployeeId())
+                .orElseThrow(() -> new ApiException("employee not found"));
+
+        // validate vendor
+        personRepo.findById(record.getVendorId())
+                .orElseThrow(() -> new ApiException("vendor not found"));
+
+        return engagementRepo.save(record);
     }
 
     @Override
-    public VendorEngagement createVendor(VendorEngagement vendor) {
-        return repository.save(vendor);
+    public List<VendorEngagementRecord> getEngagementsByEmployee(Long employeeId) {
+        return engagementRepo.findByEmployeeId(employeeId);
     }
 
     @Override
-    public VendorEngagement updateVendor(Long id, VendorEngagement vendor) {
-        Optional<VendorEngagement> existing = repository.findById(id);
-        if(existing.isPresent()) {
-            VendorEngagement v = existing.get();
-            v.setName(vendor.getName());
-            v.setEmail(vendor.getEmail());
-            v.setPhone(vendor.getPhone());
-            return repository.save(v);
-        }
-        return null;
+    public List<VendorEngagementRecord> getEngagementsByVendor(Long vendorId) {
+        return engagementRepo.findByVendorId(vendorId);
     }
 
     @Override
-    public void deleteVendor(Long id) {
-        repository.deleteById(id);
+    public List<VendorEngagementRecord> getAllEngagements() {
+        return engagementRepo.findAll();
     }
 }
