@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 
 @Entity
 public class ConflictCase {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String status;
 
     public Long getId() { return id; }
