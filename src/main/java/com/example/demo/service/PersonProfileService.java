@@ -13,7 +13,7 @@ public interface PersonProfileService {
 
     List<PersonProfile> getAllPersons();
 
-    PersonProfile updateRelationshipDeclared(Long id, boolean declared);
-
     Optional<PersonProfile> findByReferenceId(String referenceId);
+
+    PersonProfile updateRelationshipDeclared(Long id, boolean declared);
 }
