@@ -14,12 +14,15 @@ public class RelationshipDeclaration {
     private String relatedPersonName;
     private String relationshipType;
     private String description;
+    private boolean verified;
 
     private Boolean isVerified = false;
 
     private LocalDateTime declaredAt = LocalDateTime.now();
 
     // Getters and Setters
+     public void setVerified(boolean verified) { this.verified = verified; }
+}
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

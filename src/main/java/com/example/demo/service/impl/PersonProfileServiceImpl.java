@@ -12,6 +12,14 @@ public class PersonProfileServiceImpl implements PersonProfileService {
 
     @Autowired
     private PersonProfileRepository repository;
+    @Override
+public PersonProfile updateRelationshipDeclared(Long id, boolean declared) {
+    PersonProfile p = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Person not found"));
+    p.setRelationshipDeclared(declared);
+    return repository.save(p);
+}
+
 
     @Override
     public PersonProfile createPerson(PersonProfile person) {

@@ -6,11 +6,10 @@ import java.util.List;
 
 public interface PersonProfileService {
 
-    PersonProfile save(PersonProfile personProfile);
+PersonProfile createPerson(PersonProfile person);
+PersonProfile getPersonById(Long id);
+List<PersonProfile> getAllPersons();
+PersonProfile findByReferenceId(String referenceId);
+PersonProfile updateRelationshipDeclared(Long id, boolean declared);
 
-    List<PersonProfile> getAll();
-
-    PersonProfile getById(Long id);
-
-    void updateRelationshipDeclared(Long id, boolean declared);
 }

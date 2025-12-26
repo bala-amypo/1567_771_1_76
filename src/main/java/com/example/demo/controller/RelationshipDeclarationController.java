@@ -8,30 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/relationships")
+@RequestMapping("/relationship-declarations")
 public class RelationshipDeclarationController {
 
-    private final RelationshipDeclarationService service;
-
-    public RelationshipDeclarationController(RelationshipDeclarationService service) {
-        this.service = service;
-    }
+    @Autowired
+    private RelationshipDeclarationService service;
 
     @PostMapping
-    public ResponseEntity<RelationshipDeclaration> declare(
-            @RequestBody RelationshipDeclaration declaration) {
-        return ResponseEntity.ok(service.declareRelationship(declaration));
+    public ResponseEntity<RelationshipDeclaration> declareRelationship(@RequestBody RelationshipDeclaration rd) {
+        return ResponseEntity.ok(service.create(rd));
     }
 
     @PutMapping("/{id}/verify")
-    public ResponseEntity<RelationshipDeclaration> verify(
-            @PathVariable Long id,
-            @RequestParam boolean verified) {
-        return ResponseEntity.ok(service.verifyDeclaration(id, verified));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<RelationshipDeclaration>> getAll() {
-        return ResponseEntity.ok(service.getAllDeclarations());
+    public ResponseEntity<RelationshipDeclaration> verifyDeclaration(@PathVariable Long id,
+                                                                     @RequestParam boolean status) {
+        return ResponseEntity.ok(service.verifyDeclaration(id, status));
     }
 }
