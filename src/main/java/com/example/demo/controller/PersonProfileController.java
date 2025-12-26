@@ -17,25 +17,21 @@ public class PersonProfileController {
 
     @PostMapping
     public ResponseEntity<PersonProfile> createProfile(@RequestBody PersonProfile profile) {
-        PersonProfile created = personProfileService.createProfile(profile);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(personProfileService.createProfile(profile));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PersonProfile> updateProfile(@PathVariable Long id, @RequestBody PersonProfile profile) {
-        PersonProfile updated = personProfileService.updateProfile(id, profile);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(personProfileService.updateProfile(id, profile));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PersonProfile> getProfileById(@PathVariable Long id) {
-        PersonProfile profile = personProfileService.getProfileById(id);
-        return ResponseEntity.ok(profile);
+        return ResponseEntity.ok(personProfileService.getProfileById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<PersonProfile>> getAllProfiles() {
-        List<PersonProfile> profiles = personProfileService.getAllProfiles();
-        return ResponseEntity.ok(profiles);
+        return ResponseEntity.ok(personProfileService.getAllProfiles());
     }
 }

@@ -17,25 +17,21 @@ public class ConflictFlagController {
 
     @PostMapping
     public ResponseEntity<ConflictFlag> createConflictFlag(@RequestBody ConflictFlag conflictFlag) {
-        ConflictFlag created = conflictFlagService.createConflictFlag(conflictFlag);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(conflictFlagService.createConflictFlag(conflictFlag));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ConflictFlag> updateConflictFlag(@PathVariable Long id, @RequestBody ConflictFlag conflictFlag) {
-        ConflictFlag updated = conflictFlagService.updateConflictFlag(id, conflictFlag);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(conflictFlagService.updateConflictFlag(id, conflictFlag));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ConflictFlag> getConflictFlagById(@PathVariable Long id) {
-        ConflictFlag conflictFlag = conflictFlagService.getConflictFlagById(id);
-        return ResponseEntity.ok(conflictFlag);
+        return ResponseEntity.ok(conflictFlagService.getConflictFlagById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<ConflictFlag>> getAllConflictFlags() {
-        List<ConflictFlag> conflictFlags = conflictFlagService.getAllConflictFlags();
-        return ResponseEntity.ok(conflictFlags);
+        return ResponseEntity.ok(conflictFlagService.getAllConflictFlags());
     }
 }

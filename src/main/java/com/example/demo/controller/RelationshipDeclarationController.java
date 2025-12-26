@@ -17,25 +17,21 @@ public class RelationshipDeclarationController {
 
     @PostMapping
     public ResponseEntity<RelationshipDeclaration> createRelationship(@RequestBody RelationshipDeclaration rel) {
-        RelationshipDeclaration created = relationshipService.createRelationship(rel);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(relationshipService.createRelationship(rel));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RelationshipDeclaration> updateRelationship(@PathVariable Long id, @RequestBody RelationshipDeclaration rel) {
-        RelationshipDeclaration updated = relationshipService.updateRelationship(id, rel);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(relationshipService.updateRelationship(id, rel));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RelationshipDeclaration> getRelationshipById(@PathVariable Long id) {
-        RelationshipDeclaration rel = relationshipService.getRelationshipById(id);
-        return ResponseEntity.ok(rel);
+        return ResponseEntity.ok(relationshipService.getRelationshipById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<RelationshipDeclaration>> getAllRelationships() {
-        List<RelationshipDeclaration> list = relationshipService.getAllRelationships();
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(relationshipService.getAllRelationships());
     }
 }
