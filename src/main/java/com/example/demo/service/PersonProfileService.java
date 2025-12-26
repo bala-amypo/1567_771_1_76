@@ -1,22 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.model.PersonProfile;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonProfileService {
 
-    // Get all profiles
-    List<PersonProfile> getAllProfiles();
+    PersonProfile createPerson(PersonProfile person);
 
-    // Get profile by ID
-    PersonProfile getProfileById(Long id);
+    PersonProfile getPersonById(Long id);
 
-    // Create a new profile
-    PersonProfile createProfile(PersonProfile profile);
+    List<PersonProfile> getAllPersons();
 
-    // Update an existing profile
-    PersonProfile updateProfile(Long id, PersonProfile profile);
+    PersonProfile updateRelationshipDeclared(Long id, boolean declared);
 
-    // Delete a profile by ID
-    void deleteProfile(Long id);
+    Optional<PersonProfile> findByReferenceId(String referenceId);
 }
