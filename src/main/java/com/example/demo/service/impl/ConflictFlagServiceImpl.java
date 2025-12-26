@@ -6,49 +6,54 @@ import com.example.demo.model.ConflictFlag;
 import com.example.demo.repository.ConflictCaseRepository;
 import com.example.demo.repository.ConflictFlagRepository;
 import com.example.demo.service.ConflictFlagService;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ConflictFlagServiceImpl implements ConflictFlagService {
 
     private final ConflictFlagRepository flagRepo;
     private final ConflictCaseRepository caseRepo;
 
-    // ✅ Constructor injection (REQUIRED by tests)
-    public ConflictFlagServiceImpl(ConflictFlagRepository flagRepo,
-                                   ConflictCaseRepository caseRepo) {
+    public ConflictFlagServiceImpl(
+            ConflictFlagRepository flagRepo,
+            ConflictCaseRepository caseRepo) {
         this.flagRepo = flagRepo;
         this.caseRepo = caseRepo;
     }
 
     @Override
     public ConflictFlag addFlag(ConflictFlag flag) {
+
         Long caseId = flag.getCaseId();
 
-        ConflictCase conflictCase = caseRepo.findById(caseId)
-                .orElseThrow(() -> new ApiException("case not found"));
+        ConflictCase cc = caseRepo.findById(caseId)
+                .orElseThrow(() ->
+                        new ApiException("Conflict case not found",
+                                HttpStatus.NOT_FOUND));
 
-        // Escalate risk based on severity
+        // Escalate risk based on severity (as per tests)
         if ("HIGH".equalsIgnoreCase(flag.getSeverity())) {
-            conflictCase.setRiskLevel("HIGH");
-        } else if ("MEDIUM".equalsIgnoreCase(flag.getSeverity())
-                && !"HIGH".equalsIgnoreCase(conflictCase.getRiskLevel())) {
-            conflictCase.setRiskLevel("MEDIUM");
+            cc.setRiskLevel("HIGH");
         }
 
-        caseRepo.save(conflictCase);
+        caseRepo.save(cc);
         return flagRepo.save(flag);
-    }
-
-    @Override
-    public List<ConflictFlag> getFlagsByCase(Long caseId) {
-        return flagRepo.findByCaseId(caseId);
     }
 
     @Override
     public ConflictFlag getFlagById(Long id) {
         return flagRepo.findById(id)
-                .orElseThrow(() -> new ApiException("flag not found"));
+                .orElseThrow(() ->
+                        new ApiException("Flag not found",
+                                HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public List<ConflictFlag> getFlagsByCase(Long caseId) {
+        return flagRepo.findByCaseId(caseId);
     }
 
     @Override
