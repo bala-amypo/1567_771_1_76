@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class RelationshipDeclaration {
@@ -10,40 +12,62 @@ public class RelationshipDeclaration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long personId;
-    private String relatedPersonName;
+    private Long person1Id;
+    private Long person2Id;
     private String relationshipType;
-    private String description;
     private boolean verified;
 
-    private Boolean isVerified = false;
-
-    private LocalDateTime declaredAt = LocalDateTime.now();
-
-    // Getters and Setters
-     public void setVerified(boolean verified) { this.verified = verified; }
-}
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getPersonId() { return personId; }
-    public void setPersonId(Long personId) { this.personId = personId; }
-
-    public String getRelatedPersonName() { return relatedPersonName; }
-    public void setRelatedPersonName(String relatedPersonName) {
-        this.relatedPersonName = relatedPersonName;
+    // Default constructor
+    public RelationshipDeclaration() {
     }
 
-    public String getRelationshipType() { return relationshipType; }
+    // Parameterized constructor
+    public RelationshipDeclaration(Long person1Id, Long person2Id, String relationshipType, boolean verified) {
+        this.person1Id = person1Id;
+        this.person2Id = person2Id;
+        this.relationshipType = relationshipType;
+        this.verified = verified;
+    }
+
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getPerson1Id() {
+        return person1Id;
+    }
+
+    public void setPerson1Id(Long person1Id) {
+        this.person1Id = person1Id;
+    }
+
+    public Long getPerson2Id() {
+        return person2Id;
+    }
+
+    public void setPerson2Id(Long person2Id) {
+        this.person2Id = person2Id;
+    }
+
+    public String getRelationshipType() {
+        return relationshipType;
+    }
+
     public void setRelationshipType(String relationshipType) {
         this.relationshipType = relationshipType;
     }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public boolean isVerified() {
+        return verified;
+    }
 
-    public Boolean getIsVerified() { return isVerified; }
-    public void setIsVerified(Boolean verified) { isVerified = verified; }
-
-    public LocalDateTime getDeclaredAt() { return declaredAt; }
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 }
