@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class VendorEngagementRecord {
+public class VendorEngagement{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
