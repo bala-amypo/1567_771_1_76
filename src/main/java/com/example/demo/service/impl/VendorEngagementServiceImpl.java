@@ -11,25 +11,25 @@ import java.util.List;
 public class VendorEngagementServiceImpl implements VendorEngagementService {
 
     @Autowired
-    private VendorEngagementRecordRepository repository;
+    private VendorEngagementRepository repository;
 
     @Override
-    public VendorEngagementRecord create(VendorEngagementRecord record) {
+    public VendorEngagement create(VendorEngagement record) {
         return repository.save(record);
     }
 
     @Override
-    public List<VendorEngagementRecord> getEngagementsByEmployee(Long employeeId) {
+    public List<VendorEngagement> getEngagementsByEmployee(Long employeeId) {
         return repository.findByEmployeeId(employeeId);
     }
 
     @Override
-    public List<VendorEngagementRecord> getEngagementsByVendor(Long vendorId) {
+    public List<VendorEngagement> getEngagementsByVendor(Long vendorId) {
         return repository.findByVendorId(vendorId);
     }
 
     @Override
-    public List<VendorEngagementRecord> getAllEngagements() {
+    public List<VendorEngagement> getAllEngagements() {
         return repository.findAll();
     }
 }
