@@ -1,19 +1,22 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.ApiException;
+import com.example.demo.model.PersonProfile;
 import com.example.demo.model.VendorEngagementRecord;
 import com.example.demo.repository.PersonProfileRepository;
 import com.example.demo.repository.VendorEngagementRecordRepository;
 import com.example.demo.service.VendorEngagementService;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class VendorEngagementServiceImpl implements VendorEngagementService {
 
     private final VendorEngagementRecordRepository engagementRepo;
     private final PersonProfileRepository personRepo;
 
-    // ✅ Constructor injection (REQUIRED)
     public VendorEngagementServiceImpl(
             VendorEngagementRecordRepository engagementRepo,
             PersonProfileRepository personRepo) {
@@ -22,26 +25,41 @@ public class VendorEngagementServiceImpl implements VendorEngagementService {
     }
 
     @Override
-    public VendorEngagementRecord addEngagement(VendorEngagementRecord record) {
+    public VendorEngagementRecord addEngagement(
+            VendorEngagementRecord record) {
 
-        // validate employee
-        personRepo.findById(record.getEmployeeId())
-                .orElseThrow(() -> new ApiException("employee not found"));
+        PersonProfile employee = personRepo.findById(record.getEmployeeId())
+                .orElseThrow(() ->
+                        new ApiException("Employee not found",
+                                HttpStatus.NOT_FOUND));
 
-        // validate vendor
-        personRepo.findById(record.getVendorId())
-                .orElseThrow(() -> new ApiException("vendor not found"));
+        PersonProfile vendor = personRepo.findById(record.getVendorId())
+                .orElseThrow(() ->
+                        new ApiException("Vendor not found",
+                                HttpStatus.NOT_FOUND));
+
+        if (!"EMPLOYEE".equalsIgnoreCase(employee.getPersonType())) {
+            throw new ApiException("Invalid employee",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (!"VENDOR".equalsIgnoreCase(vendor.getPersonType())) {
+            throw new ApiException("Invalid vendor",
+                    HttpStatus.BAD_REQUEST);
+        }
 
         return engagementRepo.save(record);
     }
 
     @Override
-    public List<VendorEngagementRecord> getEngagementsByEmployee(Long employeeId) {
+    public List<VendorEngagementRecord> getEngagementsByEmployee(
+            Long employeeId) {
         return engagementRepo.findByEmployeeId(employeeId);
     }
 
     @Override
-    public List<VendorEngagementRecord> getEngagementsByVendor(Long vendorId) {
+    public List<VendorEngagementRecord> getEngagementsByVendor(
+            Long vendorId) {
         return engagementRepo.findByVendorId(vendorId);
     }
 
