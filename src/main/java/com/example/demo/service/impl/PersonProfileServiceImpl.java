@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PersonProfileServiceImpl implements PersonProfileService {
+public class PersonProfileServiceImpl
+        implements PersonProfileService {
 
     private final PersonProfileRepository repository;
 
-    public PersonProfileServiceImpl(PersonProfileRepository repository) {
+    public PersonProfileServiceImpl(
+            PersonProfileRepository repository) {
         this.repository = repository;
     }
 
@@ -29,5 +31,18 @@ public class PersonProfileServiceImpl implements PersonProfileService {
     @Override
     public PersonProfile getById(Long id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void updateRelationshipDeclared(
+            Long id, boolean declared) {
+
+        PersonProfile profile =
+                repository.findById(id).orElse(null);
+
+        if (profile != null) {
+            profile.setRelationshipDeclared(declared);
+            repository.save(profile);
+        }
     }
 }
