@@ -4,8 +4,8 @@ import com.example.demo.model.RelationshipDeclaration;
 import java.util.List;
 
 public interface RelationshipDeclarationService {
-    RelationshipDeclaration createRelationship(RelationshipDeclaration relationship);
-    RelationshipDeclaration updateRelationship(Long id, RelationshipDeclaration relationship);
-    RelationshipDeclaration getRelationshipById(Long id);
     List<RelationshipDeclaration> getAllRelationships();
+    RelationshipDeclaration createRelationship(RelationshipDeclaration rd);
+    RelationshipDeclaration updateRelationship(Long id, RelationshipDeclaration rd);
+    void deleteRelationship(Long id);
 }

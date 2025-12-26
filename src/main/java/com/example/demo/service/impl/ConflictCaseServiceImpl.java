@@ -14,31 +14,25 @@ public class ConflictCaseServiceImpl implements ConflictCaseService {
     private ConflictCaseRepository repository;
 
     @Override
-    public ConflictCase createCase(ConflictCase conflictCase) {
-        return repository.save(conflictCase);
+    public List<ConflictCase> getAllConflictCases() {
+        return repository.findAll();
     }
 
     @Override
-    public ConflictCase updateCaseStatus(Long caseId, String status) {
-        ConflictCase cc = repository.findById(caseId)
-            .orElseThrow(() -> new RuntimeException("Case not found"));
-        cc.setStatus(status);
+    public ConflictCase createConflictCase(ConflictCase cc) {
         return repository.save(cc);
     }
 
     @Override
-    public ConflictCase getCaseById(Long caseId) {
-        return repository.findById(caseId)
-            .orElseThrow(() -> new RuntimeException("Case not found"));
+    public ConflictCase updateConflictCase(Long id, ConflictCase cc) {
+        return repository.findById(id).map(existing -> {
+            existing.setStatus(cc.getStatus());
+            return repository.save(existing);
+        }).orElse(null);
     }
 
     @Override
-    public List<ConflictCase> getCasesByPerson(Long personId) {
-        return repository.findByPrimaryPersonIdOrSecondaryPersonId(personId, personId);
-    }
-
-    @Override
-    public List<ConflictCase> getAllCases() {
-        return repository.findAll();
+    public void deleteConflictCase(Long id) {
+        repository.deleteById(id);
     }
 }
