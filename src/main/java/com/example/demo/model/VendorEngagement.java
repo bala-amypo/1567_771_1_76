@@ -1,13 +1,8 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "vendor_engagements")
 public class VendorEngagement {
 
     @Id
@@ -16,70 +11,26 @@ public class VendorEngagement {
 
     private String name;
     private String email;
-    private String contactNumber;
+    private String phone;
 
-    // Default constructor
-    public VendorEngagement() {
-    }
-
-    // Parameterized constructor
-    public VendorEngagement(String name, String email, String contactNumber) {
+    // Constructors
+    public VendorEngagement() {}
+    public VendorEngagement(String name, String email, String phone) {
         this.name = name;
         this.email = email;
-        this.contactNumber = contactNumber;
+        this.phone = phone;
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    // Example methods
-    public void createVendor() {
-        // Add logic for creating vendor if needed
-        System.out.println("Vendor created: " + this.name);
-    }
-
-    public void updateVendor() {
-        // Add logic for updating vendor if needed
-        System.out.println("Vendor updated: " + this.name);
-    }
-
-    @Override
-    public String toString() {
-        return "VendorEngagement{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", contactNumber='" + contactNumber + '\'' +
-                '}';
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

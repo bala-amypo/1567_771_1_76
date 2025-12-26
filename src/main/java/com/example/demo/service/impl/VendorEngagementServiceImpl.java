@@ -22,13 +22,25 @@ public class VendorEngagementServiceImpl implements VendorEngagementService {
 
     @Override
     public VendorEngagement getVendorById(Long id) {
-        Optional<VendorEngagement> vendor = repository.findById(id);
-        return vendor.orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public VendorEngagement saveVendor(VendorEngagement vendor) {
+    public VendorEngagement createVendor(VendorEngagement vendor) {
         return repository.save(vendor);
+    }
+
+    @Override
+    public VendorEngagement updateVendor(Long id, VendorEngagement vendor) {
+        Optional<VendorEngagement> existing = repository.findById(id);
+        if(existing.isPresent()) {
+            VendorEngagement v = existing.get();
+            v.setName(vendor.getName());
+            v.setEmail(vendor.getEmail());
+            v.setPhone(vendor.getPhone());
+            return repository.save(v);
+        }
+        return null;
     }
 
     @Override
