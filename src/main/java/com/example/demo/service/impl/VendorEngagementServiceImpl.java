@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.VendorEngagementRecord;
-import com.example.demo.repository.VendorEngagementRecordRepository;
+import com.example.demo.model.VendorEngagement;
+import com.example.demo.repository.VendorEngagementRepository;
 import com.example.demo.service.VendorEngagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
