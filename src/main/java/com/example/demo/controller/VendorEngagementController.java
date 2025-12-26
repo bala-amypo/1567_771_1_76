@@ -11,30 +11,26 @@ import java.util.List;
 @RequestMapping("/vendor-engagements")
 public class VendorEngagementController {
 
-    private final VendorEngagementService service;
-
-    public VendorEngagementController(VendorEngagementService service) {
-        this.service = service;
-    }
+    @Autowired
+    private VendorEngagementService service;
 
     @PostMapping
-    public ResponseEntity<VendorEngagementRecord> addEngagement(
-            @RequestBody VendorEngagementRecord record) {
-        return ResponseEntity.ok(service.addEngagement(record));
+    public ResponseEntity<VendorEngagementRecord> addEngagement(@RequestBody VendorEngagementRecord record) {
+        return ResponseEntity.ok(service.create(record));
     }
 
-    @GetMapping("/employee/{id}")
-    public ResponseEntity<List<VendorEngagementRecord>> byEmployee(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getEngagementsByEmployee(id));
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<VendorEngagementRecord>> getEngagementsByEmployee(@PathVariable Long employeeId) {
+        return ResponseEntity.ok(service.getEngagementsByEmployee(employeeId));
     }
 
-    @GetMapping("/vendor/{id}")
-    public ResponseEntity<List<VendorEngagementRecord>> byVendor(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getEngagementsByVendor(id));
+    @GetMapping("/vendor/{vendorId}")
+    public ResponseEntity<List<VendorEngagementRecord>> getEngagementsByVendor(@PathVariable Long vendorId) {
+        return ResponseEntity.ok(service.getEngagementsByVendor(vendorId));
     }
 
     @GetMapping
-    public ResponseEntity<List<VendorEngagementRecord>> getAll() {
+    public ResponseEntity<List<VendorEngagementRecord>> getAllEngagements() {
         return ResponseEntity.ok(service.getAllEngagements());
     }
 }
