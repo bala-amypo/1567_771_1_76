@@ -1,45 +1,68 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ApiException;
 import com.example.demo.model.PersonProfile;
 import com.example.demo.repository.PersonProfileRepository;
 import com.example.demo.service.PersonProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
-@Service
+import java.util.List;
+import java.util.Optional;
+
 public class PersonProfileServiceImpl implements PersonProfileService {
 
-    @Autowired
-    private PersonProfileRepository repository;
-    @Override
-public PersonProfile updateRelationshipDeclared(Long id, boolean declared) {
-    PersonProfile p = repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Person not found"));
-    p.setRelationshipDeclared(declared);
-    return repository.save(p);
-}
+    private final PersonProfileRepository personRepo;
 
+    // ✅ Constructor injection (REQUIRED)
+    public PersonProfileServiceImpl(PersonProfileRepository personRepo) {
+        this.personRepo = personRepo;
+    }
 
     @Override
     public PersonProfile createPerson(PersonProfile person) {
-        return repository.save(person);
+
+        // email validation
+        if (person.getEmail() == null || person.getEmail().trim().isEmpty()) {
+            throw new ApiException("email is required");
+        }
+
+        if (personRepo.findByEmail(person.getEmail()).isPresent()) {
+            throw new ApiException("email already exists");
+        }
+
+        // referenceId validation
+        if (person.getReferenceId() == null || person.getReferenceId().trim().isEmpty()) {
+            throw new ApiException("reference is required");
+        }
+
+        if (personRepo.findByReferenceId(person.getReferenceId()).isPresent()) {
+            throw new ApiException("reference already exists");
+        }
+
+        return personRepo.save(person);
     }
 
     @Override
     public PersonProfile getPersonById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Person not found"));
+        return personRepo.findById(id)
+                .orElseThrow(() -> new ApiException("person not found"));
     }
 
     @Override
     public List<PersonProfile> getAllPersons() {
-        return repository.findAll();
+        return personRepo.findAll();
     }
 
     @Override
-    public PersonProfile findByReferenceId(String referenceId) {
-        return repository.findByReferenceId(referenceId)
-            .orElseThrow(() -> new RuntimeException("Person not found"));
+    public PersonProfile updateRelationshipDeclared(Long id, boolean declared) {
+        PersonProfile person = personRepo.findById(id)
+                .orElseThrow(() -> new ApiException("person not found"));
+
+        person.setRelationshipDeclared(declared);
+        return personRepo.save(person);
+    }
+
+    @Override
+    public Optional<PersonProfile> findByReferenceId(String referenceId) {
+        return personRepo.findByReferenceId(referenceId);
     }
 }
