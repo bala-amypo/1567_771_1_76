@@ -1,29 +1,42 @@
-// package com.example.demo.config;
+package com.example.demo.config;
 
-// import io.swagger.v3.oas.models.OpenAPI;
-// import io.swagger.v3.oas.models.info.Info;
-// import io.swagger.v3.oas.models.security.SecurityRequirement;
-// import io.swagger.v3.oas.models.security.SecurityScheme;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-// @Configuration
-// public class OpenApiConfig {
+import java.util.List;
 
-//     @Bean
-//     public OpenAPI customOpenAPI() {
+@Configuration
+public class OpenApiConfig {
 
-//         SecurityScheme bearerScheme = new SecurityScheme()
-//                 .type(SecurityScheme.Type.HTTP)
-//                 .scheme("bearer")
-//                 .bearerFormat("JWT");
+    @Bean
+    public OpenAPI customOpenAPI() {
 
-//         return new OpenAPI()
-//                 .info(new Info()
-//                         .title("Conflict of Interest Detection API")
-//                         .description("Backend APIs for COI detection and compliance workflow")
-//                         .version("1.0.0"))
-//                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-//                 .schemaRequirement("bearerAuth", bearerScheme);
-//     }
-// }
+        return new OpenAPI()
+                // 🌐 Your server URL
+                .servers(List.of(
+                        new Server().url("https://9091.pro604cr.amypo.ai/")
+                ))
+
+                // 🔐 Apply JWT security globally
+                .addSecurityItem(
+                        new SecurityRequirement().addList("bearerAuth")
+                )
+
+                // 🔐 Define JWT Bearer Authentication
+                .components(
+                        new Components()
+                                .addSecuritySchemes(
+                                        "bearerAuth",
+                                        new SecurityScheme()
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT")
+                                )
+                );
+    }
+}
