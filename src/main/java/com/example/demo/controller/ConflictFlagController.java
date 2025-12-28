@@ -1,53 +1,39 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.PersonProfile;
-import com.example.demo.service.PersonProfileService;
+import com.example.demo.model.ConflictFlag;
+import com.example.demo.service.ConflictFlagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/persons")
-public class PersonProfileController {
+@RequestMapping("/flags")
+public class ConflictFlagController {
 
-    private final PersonProfileService service;
+    private final ConflictFlagService service;
 
-    public PersonProfileController(PersonProfileService service) {
+    public ConflictFlagController(ConflictFlagService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<PersonProfile> create(@RequestBody PersonProfile person) {
-        return ResponseEntity.ok(service.createPerson(person));
+    public ResponseEntity<ConflictFlag> create(@RequestBody ConflictFlag flag) {
+        return ResponseEntity.ok(service.addFlag(flag));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonProfile> getById(@PathVariable Long id) {
-        return service.getPersonById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ConflictFlag> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getFlagById(id));
+    }
+
+    @GetMapping("/case/{caseId}")
+    public ResponseEntity<List<ConflictFlag>> getByCase(@PathVariable Long caseId) {
+        return ResponseEntity.ok(service.getFlagsByCase(caseId));
     }
 
     @GetMapping
-    public ResponseEntity<List<PersonProfile>> getAll() {
-        return ResponseEntity.ok(service.getAllPersons());
-    }
-
-    @GetMapping("/lookup/{referenceId}")
-    public ResponseEntity<PersonProfile> lookup(@PathVariable String referenceId) {
-        return service.findByReferenceId(referenceId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}/relationship")
-    public ResponseEntity<PersonProfile> updateRelationshipDeclared(
-            @PathVariable Long id,
-            @RequestParam boolean declared) {
-
-        return ResponseEntity.ok(
-                service.updateRelationshipDeclared(id, declared)
-        );
+    public ResponseEntity<List<ConflictFlag>> getAll() {
+        return ResponseEntity.ok(service.getAllFlags());
     }
 }
