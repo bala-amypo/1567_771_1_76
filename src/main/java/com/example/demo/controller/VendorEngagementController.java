@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.VendorEngagementRecord;
 import com.example.demo.service.VendorEngagementService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,44 +10,29 @@ import java.util.List;
 @RequestMapping("/api/engagements")
 public class VendorEngagementController {
 
-    private final VendorEngagementService engagementService;
+    private final VendorEngagementService service;
 
-    // ✅ Constructor injection (REQUIRED)
-    public VendorEngagementController(VendorEngagementService engagementService) {
-        this.engagementService = engagementService;
+    public VendorEngagementController(VendorEngagementService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<VendorEngagementRecord> add(
-            @RequestBody VendorEngagementRecord record) {
-
-        return ResponseEntity.ok(
-                engagementService.addEngagement(record)
-        );
-    }
-
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<VendorEngagementRecord>> byEmployee(
-            @PathVariable Long employeeId) {
-
-        return ResponseEntity.ok(
-                engagementService.getEngagementsByEmployee(employeeId)
-        );
-    }
-
-    @GetMapping("/vendor/{vendorId}")
-    public ResponseEntity<List<VendorEngagementRecord>> byVendor(
-            @PathVariable Long vendorId) {
-
-        return ResponseEntity.ok(
-                engagementService.getEngagementsByVendor(vendorId)
-        );
+    public VendorEngagementRecord add(@RequestBody VendorEngagementRecord record) {
+        return service.addEngagement(record);
     }
 
     @GetMapping
-    public ResponseEntity<List<VendorEngagementRecord>> getAll() {
-        return ResponseEntity.ok(
-                engagementService.getAllEngagements()
-        );
+    public List<VendorEngagementRecord> getAll() {
+        return service.getAllEngagements();
+    }
+
+    @GetMapping("/employee/{id}")
+    public List<VendorEngagementRecord> getByEmployee(@PathVariable Long id) {
+        return service.getEngagementsByEmployee(id);
+    }
+
+    @GetMapping("/vendor/{id}")
+    public List<VendorEngagementRecord> getByVendor(@PathVariable Long id) {
+        return service.getEngagementsByVendor(id);
     }
 }

@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.RelationshipDeclaration;
 import com.example.demo.service.RelationshipDeclarationService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,37 +10,30 @@ import java.util.List;
 @RequestMapping("/api/relationships")
 public class RelationshipDeclarationController {
 
-    private final RelationshipDeclarationService relationshipService;
+    private final RelationshipDeclarationService service;
 
-    // ✅ Constructor injection (REQUIRED)
-    public RelationshipDeclarationController(
-            RelationshipDeclarationService relationshipService) {
-        this.relationshipService = relationshipService;
+    public RelationshipDeclarationController(RelationshipDeclarationService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<RelationshipDeclaration> declare(
-            @RequestBody RelationshipDeclaration declaration) {
-
-        return ResponseEntity.ok(
-                relationshipService.declareRelationship(declaration)
-        );
+    public RelationshipDeclaration declare(@RequestBody RelationshipDeclaration declaration) {
+        return service.declareRelationship(declaration);
     }
 
-    @PatchMapping("/{id}/verify")
-    public ResponseEntity<RelationshipDeclaration> verify(
-            @PathVariable Long id,
-            @RequestParam boolean verified) {
+    @GetMapping("/person/{personId}")
+    public List<RelationshipDeclaration> getByPerson(@PathVariable Long personId) {
+        return service.getDeclarationsByPerson(personId);
+    }
 
-        return ResponseEntity.ok(
-                relationshipService.verifyDeclaration(id, verified)
-        );
+    @PutMapping("/{id}/verify")
+    public RelationshipDeclaration verify(@PathVariable Long id,
+                                          @RequestParam boolean verified) {
+        return service.verifyDeclaration(id, verified);
     }
 
     @GetMapping
-    public ResponseEntity<List<RelationshipDeclaration>> getAll() {
-        return ResponseEntity.ok(
-                relationshipService.getAllDeclarations()
-        );
+    public List<RelationshipDeclaration> getAll() {
+        return service.getAllDeclarations();
     }
 }
