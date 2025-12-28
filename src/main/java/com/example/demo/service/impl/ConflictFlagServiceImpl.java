@@ -6,7 +6,6 @@ import com.example.demo.model.ConflictFlag;
 import com.example.demo.repository.ConflictCaseRepository;
 import com.example.demo.repository.ConflictFlagRepository;
 import com.example.demo.service.ConflictFlagService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,28 +26,24 @@ public class ConflictFlagServiceImpl implements ConflictFlagService {
     @Override
     public ConflictFlag addFlag(ConflictFlag flag) {
 
-        Long caseId = flag.getCaseId();
+        ConflictCase c = caseRepo.findById(flag.getCaseId())
+                .orElseThrow(() -> new ApiException("Case not found"));
 
-        ConflictCase cc = caseRepo.findById(caseId)
-                .orElseThrow(() ->
-                        new ApiException("Conflict case not found",
-                                HttpStatus.NOT_FOUND));
-
-        // Escalate risk based on severity (as per tests)
-        if ("HIGH".equalsIgnoreCase(flag.getSeverity())) {
-            cc.setRiskLevel("HIGH");
+        if ("HIGH".equals(flag.getSeverity())) {
+            c.setRiskLevel("HIGH");
+        } else if ("MEDIUM".equals(flag.getSeverity())
+                && !"HIGH".equals(c.getRiskLevel())) {
+            c.setRiskLevel("MEDIUM");
         }
 
-        caseRepo.save(cc);
+        caseRepo.save(c);
         return flagRepo.save(flag);
     }
 
     @Override
     public ConflictFlag getFlagById(Long id) {
         return flagRepo.findById(id)
-                .orElseThrow(() ->
-                        new ApiException("Flag not found",
-                                HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ApiException("Flag not found"));
     }
 
     @Override

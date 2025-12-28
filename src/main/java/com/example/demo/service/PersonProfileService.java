@@ -9,11 +9,11 @@ public interface PersonProfileService {
 
     PersonProfile createPerson(PersonProfile person);
 
-    PersonProfile getPersonById(Long id);
-
-    List<PersonProfile> getAllPersons();
+    Optional<PersonProfile> getPersonById(Long id);
 
     Optional<PersonProfile> findByReferenceId(String referenceId);
+
+    List<PersonProfile> getAllPersons();
 
     PersonProfile updateRelationshipDeclared(Long id, boolean declared);
 }

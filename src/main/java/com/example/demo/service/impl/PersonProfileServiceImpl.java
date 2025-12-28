@@ -4,7 +4,6 @@ import com.example.demo.exception.ApiException;
 import com.example.demo.model.PersonProfile;
 import com.example.demo.repository.PersonProfileRepository;
 import com.example.demo.service.PersonProfileService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,22 +22,16 @@ public class PersonProfileServiceImpl implements PersonProfileService {
     public PersonProfile createPerson(PersonProfile person) {
 
         if (person.getEmail() == null) {
-            throw new ApiException("Email is required",
-                    HttpStatus.BAD_REQUEST);
+            throw new ApiException("Email is required");
         }
 
-        repository.findByEmail(person.getEmail())
-                .ifPresent(p -> {
-                    throw new ApiException("Duplicate email",
-                            HttpStatus.BAD_REQUEST);
-                });
+        if (repository.findByEmail(person.getEmail()).isPresent()) {
+            throw new ApiException("Duplicate email");
+        }
 
-        if (person.getReferenceId() != null) {
-            repository.findByReferenceId(person.getReferenceId())
-                    .ifPresent(p -> {
-                        throw new ApiException("Duplicate referenceId",
-                                HttpStatus.BAD_REQUEST);
-                    });
+        if (person.getReferenceId() != null &&
+                repository.findByReferenceId(person.getReferenceId()).isPresent()) {
+            throw new ApiException("Duplicate referenceId");
         }
 
         if (person.getRelationshipDeclared() == null) {
@@ -49,11 +42,12 @@ public class PersonProfileServiceImpl implements PersonProfileService {
     }
 
     @Override
-    public PersonProfile getPersonById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ApiException("Person not found",
-                                HttpStatus.NOT_FOUND));
+    public Optional<PersonProfile> getPersonById(Long id) {
+        Optional<PersonProfile> person = repository.findById(id);
+        if (person.isEmpty()) {
+            throw new ApiException("Person not found");
+        }
+        return person;
     }
 
     @Override
@@ -62,20 +56,16 @@ public class PersonProfileServiceImpl implements PersonProfileService {
     }
 
     @Override
-    public Optional<PersonProfile> findByReferenceId(String referenceId) {
-        return repository.findByReferenceId(referenceId);
+    public PersonProfile updateRelationshipDeclared(Long id, boolean declared) {
+        PersonProfile person = repository.findById(id)
+                .orElseThrow(() -> new ApiException("Person not found"));
+
+        person.setRelationshipDeclared(declared);
+        return repository.save(person);
     }
 
     @Override
-    public PersonProfile updateRelationshipDeclared(
-            Long id, boolean declared) {
-
-        PersonProfile p = repository.findById(id)
-                .orElseThrow(() ->
-                        new ApiException("Person not found",
-                                HttpStatus.NOT_FOUND));
-
-        p.setRelationshipDeclared(declared);
-        return repository.save(p);
+    public Optional<PersonProfile> findByReferenceId(String referenceId) {
+        return repository.findByReferenceId(referenceId);
     }
 }
