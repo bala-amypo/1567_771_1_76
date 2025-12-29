@@ -12,8 +12,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new UserPrincipal(1L, username);
     }
 
-    // ✅ REQUIRED BY TESTS
-    public UserPrincipal register(String username, String password, String role) {
+     public UserPrincipal register(String username, String password, String role) {
         return new UserPrincipal(1L, username);
     }
 }

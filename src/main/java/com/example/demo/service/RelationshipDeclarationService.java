@@ -13,6 +13,6 @@ public interface RelationshipDeclarationService {
 
     List<RelationshipDeclaration> getDeclarationsByPerson(Long personId);
 
-    // ✅ THIS MUST EXIST
+
     List<RelationshipDeclaration> getAllDeclarations();
 }

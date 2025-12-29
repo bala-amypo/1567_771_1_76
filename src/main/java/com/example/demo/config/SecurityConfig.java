@@ -9,8 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // ✅ JwtTokenProvider injected correctly
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
     }
 
     @Bean
